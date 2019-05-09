@@ -10,12 +10,12 @@ return array(
     /**
      * The Website URL.
      */
-    'url' => 'http://www.novaframework.local/',
+    'url' => 'http://www.novapress.local/',
 
     /**
     * The Administrator's E-mail Address.
     */
-    'email' => 'admin@novaframework.local',
+    'email' => 'admin@novapress.local',
 
     /**
      * The Website Path.
@@ -25,7 +25,7 @@ return array(
     /**
      * Website Name.
      */
-    'name' => 'Nova 4.1',
+    'name' => 'Novapress 1.0',
 
     /**
      * The default Theme.
