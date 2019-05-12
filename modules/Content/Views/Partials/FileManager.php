@@ -47,7 +47,7 @@ var baseUrl = "<?= site_url(); ?>";
 
 var mediaUploadUrl   = "<?= site_url('admin/media/upload'); ?>";
 var mediaUploadedUrl = "<?= site_url('admin/media/uploaded'); ?>";
-var mediaServeUrl    = "<?= site_url('content/media/serve'); ?>";
+var mediaServeUrl    = "<?= site_url('media/serve'); ?>";
 var mediaPublicUrl   = "<?= site_url('assets/files'); ?>";
 
 var cntFiles    = null;

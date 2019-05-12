@@ -59,14 +59,14 @@ class MainMenu extends Widget
                 if ($type == 'taxonomy') {
                     $title = $instance->name;
 
-                    $url = url('content', array($instance->taxonomy, $instance->slug));
+                    $url = url(array($instance->taxonomy, $instance->slug));
                 }
 
                 // Everthing else is based on Posts or extended from them.
                 else {
                     $title = $instance->title;
 
-                    $url = site_url('content/' .$instance->name);
+                    $url = url($instance->name);
                 }
 
                 // If the user edited the title of the menu item, it will have its own title.

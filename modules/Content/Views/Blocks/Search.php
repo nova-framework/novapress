@@ -1,5 +1,5 @@
 <div id="custom-search-input" style="margin-top: 15px;">
-    <form id="content-search-form" action="<?= site_url('content/search'); ?>" method='GET' role="form">
+    <form id="content-search-form" action="<?= site_url('search'); ?>" method='GET' role="form">
 
     <div class="input-group col-md-12">
         <input name="query" type="text" class="form-control input-lg" placeholder="<?= __d('content', 'Search ...'); ?>" />

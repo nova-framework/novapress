@@ -689,7 +689,7 @@ $(function () {
     </div>
     <div class="box-body">
         <?php $thumbId = (int) $post->thumbnail_id ?: 0; ?>
-        <?php $thumbUrl = isset($post->thumbnail) && isset($post->thumbnail->attachment) ? site_url('content/media/serve/' .$post->thumbnail->attachment->name) : ''; ?>
+        <?php $thumbUrl = isset($post->thumbnail) && isset($post->thumbnail->attachment) ? site_url('media/serve/' .$post->thumbnail->attachment->name) : ''; ?>
         <input name="thumbnail" id="thumbnail" type="hidden" class="uploaded_image_selecter" value="<?= $thumbId; ?>">
         <a class="btn btn-primary btn-sm col-sm-6 pull-right btn_upload_image <?= ($thumbId > 0) ? 'hide' : ''; ?>" file_type="image" selecter="thumbnail"><?= __d('content', 'Set featured image'); ?></a>
         <div class='clearfix uploaded_image <?= ($thumbId == 0) ? 'hide' : ''; ?>'><img class="img-responsive img-thumbnail" src="<?= $thumbUrl; ?>"></div>

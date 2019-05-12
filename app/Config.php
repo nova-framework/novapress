@@ -17,7 +17,7 @@ define('STORAGE_PATH', BASEPATH .'storage' .DS);
  *
  * PREFER to be used in Database calls or storing Session data, default is 'nova_'
  */
-define('PREFIX', 'nova_');
+define('PREFIX', 'novapress_');
 
 /**
  * Setup the Config API Mode.

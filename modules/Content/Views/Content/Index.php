@@ -15,7 +15,7 @@
 
 <?php if (! $posts->isEmpty()) { ?>
 <?php foreach ($posts as $post) { ?>
-<?php $thumbnail = isset($post->thumbnail) && isset($post->thumbnail->attachment) ? site_url('content/media/serve/' .$post->thumbnail->attachment->name) .'?s=220' : ''; ?>
+<?php $thumbnail = isset($post->thumbnail) && isset($post->thumbnail->attachment) ? site_url('media/serve/' .$post->thumbnail->attachment->name) .'?s=220' : ''; ?>
 
 <h3><strong><?= $post->title; ?></strong></h3>
 <hr style="margin-bottom: 10px;">

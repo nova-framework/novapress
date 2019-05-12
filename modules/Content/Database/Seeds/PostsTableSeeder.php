@@ -34,7 +34,7 @@ class PostsTableSeeder extends Seeder
             'status'         => 'publish',
             'menu_order'     => 1,
             'type'           => 'block',
-            'guid'           => site_url('content/1'),
+            'guid'           => site_url('1'),
             'comment_status' => 'closed',
         ));
 
@@ -62,7 +62,7 @@ class PostsTableSeeder extends Seeder
             'status'         => 'publish',
             'menu_order'     => 2,
             'type'           => 'block',
-            'guid'           => site_url('content/2'),
+            'guid'           => site_url('2'),
             'comment_status' => 'closed',
         ));
 
@@ -90,7 +90,7 @@ class PostsTableSeeder extends Seeder
             'status'         => 'publish',
             'menu_order'     => 0,
             'type'           => 'block',
-            'guid'           => site_url('content/3'),
+            'guid'           => site_url('3'),
             'comment_status' => 'closed',
         ));
 
@@ -117,7 +117,7 @@ class PostsTableSeeder extends Seeder
             'excerpt'        => null,
             'status'         => 'publish',
             'type'           => 'post',
-            'guid'           => site_url('content/sample-post'),
+            'guid'           => site_url('sample-post'),
             'comment_status' => 'open',
         ));
 
@@ -148,7 +148,7 @@ As a new Nova user, you should go to <a href="' .site_url('admin') . '">your das
             'excerpt'        => null,
             'status'         => 'publish',
             'type'           => 'page',
-            'guid'           => site_url('content/sample-page'),
+            'guid'           => site_url('sample-page'),
             'comment_status' => 'closed',
         ));
 
@@ -180,7 +180,7 @@ As a new Nova user, you should go to <a href="' .site_url('admin') . '">your das
             'status'         => 'publish',
             'menu_order'     => 0,
             'type'           => 'nav_menu_item',
-            'guid'           => site_url('content/6'),
+            'guid'           => site_url('6'),
             'comment_status' => 'closed',
         ));
 
@@ -191,7 +191,7 @@ As a new Nova user, you should go to <a href="' .site_url('admin') . '">your das
             'menu_item_object'           => 'custom',
             'menu_item_object_id'        => $post->id,
             'menu_item_target'           => null,
-            'menu_item_url'              => site_url('content'),
+            'menu_item_url'              => site_url(),
         ));
 
         $post->taxonomies()->attach($taxonomy);
@@ -207,7 +207,7 @@ As a new Nova user, you should go to <a href="' .site_url('admin') . '">your das
             'status'         => 'publish',
             'menu_order'     => 7,
             'type'           => 'nav_menu_item',
-            'guid'           => site_url('content/7'),
+            'guid'           => site_url('7'),
             'comment_status' => 'closed',
         ));
 

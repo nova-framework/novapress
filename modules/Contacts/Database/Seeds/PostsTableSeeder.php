@@ -32,13 +32,13 @@ class PostsTableSeeder extends Seeder
             'comment_status' => 'closed',
         ));
 
-        $block->guid = site_url('content/{0}', $block->id);
+        $block->guid = site_url($block->id);
 
         // Setup the Metadata.
         $block->saveMeta(array(
             'block_show_title'        => 0,
             'block_visibility_mode'   => 'show',
-            'block_visibility_path'   => 'content/contact-us',
+            'block_visibility_path'   => 'contact-us',
             'block_visibility_filter' => 'any',
             'block_widget_position'   => 'content-footer',
 
@@ -63,7 +63,7 @@ class PostsTableSeeder extends Seeder
             'comment_status' => 'closed',
         ));
 
-        $page->guid = site_url('content/{0}', $page->name);
+        $page->guid = site_url($page->name);
 
         $page->save();
 
@@ -97,7 +97,7 @@ class PostsTableSeeder extends Seeder
             'comment_status' => 'closed',
         ));
 
-        $menuItem->guid = site_url('content/{0}', $name = $menuItem->id);
+        $menuItem->guid = site_url($name = $menuItem->id);
 
         $menuItem->name = $name;
 
