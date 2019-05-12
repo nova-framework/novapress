@@ -197,7 +197,7 @@ echo Asset::position('header', 'js');
       <small><!-- DO NOT DELETE! - Statistics --></small>
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; <?php echo date('Y'); ?> <a href="http://www.novaframework.com/" target="_blank"><b>Nova Framework <?= $version; ?> / Kernel <?= VERSION; ?></b></a> - </strong> All rights reserved.
+    <strong>Copyright &copy; <?php echo date('Y'); ?> <a href="http://www.novaframework.com/" target="_blank"><b>Nova Press <?= $version; ?> / Nova Framework <?= VERSION; ?></b></a> - </strong> All rights reserved.
   </footer>
 
 </div>

@@ -9,17 +9,15 @@ use Nova\Foundation\Auth\Access\AuthorizableTrait;
 use Nova\Notifications\NotifiableTrait;
 use Nova\Support\Facades\Cache;
 
-use Shared\Auth\Reminders\RemindableTrait;
-use Shared\Auth\Reminders\RemindableInterface;
 use Shared\FileField\HasFileFieldsTrait;
 
 use Modules\Messages\Traits\HasMessagesTrait;
 use Modules\Platform\Traits\HasActivitiesTrait;
 
 
-class User extends BaseModel implements UserInterface, RemindableInterface
+class User extends BaseModel implements UserInterface
 {
-    use UserTrait, RemindableTrait, AuthorizableTrait, HasFileFieldsTrait, HasActivitiesTrait, HasMessagesTrait, NotifiableTrait;
+    use UserTrait, AuthorizableTrait, HasFileFieldsTrait, HasActivitiesTrait, HasMessagesTrait, NotifiableTrait;
 
     //
     protected $table = 'users';
