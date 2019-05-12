@@ -18,8 +18,8 @@ return array(
         'mysql' => array(
             'driver'    => 'mysql',
             'hostname'  => 'localhost',
-            'database'  => 'nova',
-            'username'  => 'nova',
+            'database'  => 'novapress',
+            'username'  => 'novapress',
             'password'  => 'password',
             'prefix'    => PREFIX,
             'charset'   => 'utf8',
@@ -28,8 +28,8 @@ return array(
         'pgsql' => array(
             'driver'   => 'pgsql',
             'hostname' => 'localhost',
-            'database' => 'nova',
-            'username' => 'nova',
+            'database' => 'novapress',
+            'username' => 'novapress',
             'password' => 'password',
             'charset'  => 'utf8',
             'prefix'   => PREFIX,
