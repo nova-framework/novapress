@@ -44,7 +44,7 @@
                 </td>
                 <td style="text-align: left; vertical-align: top;" width="35%"><?= nl2br(e($comment->content)); ?></td>
                 <td style="text-align: center; vertical-align: top; font-weight: bold;" width="20%">
-                    <a target="_blank" href="<?= site_url('content/' .$comment->post->name); ?>" title="<?= __d('content', 'View the Post'); ?>"><?= $comment->post->title; ?></a>
+                    <a target="_blank" href="<?= site_url($comment->post->name); ?>" title="<?= __d('content', 'View the Post'); ?>"><?= $comment->post->title; ?></a>
                 </td>
                 <td style="text-align: center; vertical-align: top;" width="15%"><?= $comment->created_at->formatLocalized(__d('content', '%d %b %Y, %R')); ?></td>
                 <td style="text-align: right; vertical-align: middle; padding-bottom: 30px;" width="10%">

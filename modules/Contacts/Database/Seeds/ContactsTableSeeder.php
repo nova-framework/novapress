@@ -28,7 +28,7 @@ class ContactsTableSeeder extends Seeder
             'id'          => 1,
             'name'        => 'Site Contact',
             'email'       => 'admin@novaframework.local',
-            'path'        => 'content/contact-us',
+            'path'        => 'contact-us',
             'description' => 'The default site-wide Contact',
 
             //

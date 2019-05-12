@@ -26,7 +26,7 @@
 <div class="pull-right" style="font-weight: bold;"><span class="fa fa-folder-open-o"></span>
 <?php ob_start(); ?>
 <?php foreach ($categories as $category) { ?>
-<?= ($count > 0) ? ', ' : ''; ?><a href="<?= site_url('content/category/' .$category->slug); ?>"><?= $category->name; ?></a>
+<?= ($count > 0) ? ', ' : ''; ?><a href="<?= site_url('category/' .$category->slug); ?>"><?= $category->name; ?></a>
 <?php $count++; ?>
 <?php } ?>
 <?= preg_replace('~>\s,\s<~m', '>, <', ob_get_clean()); ?>
@@ -55,7 +55,7 @@
 <div class="pull-left"><i class="fa fa-tags"></i>
 <?php ob_start(); ?>
 <?php foreach ($tags as $tag) { ?>
-<?= ($count > 0) ? ', ' : ''; ?><a href="<?= site_url('content/tag/' .$tag->slug); ?>"><?= $tag->name; ?></a>
+<?= ($count > 0) ? ', ' : ''; ?><a href="<?= site_url('tag/' .$tag->slug); ?>"><?= $tag->name; ?></a>
 <?php $count++; ?>
 <?php } ?>
 <?= preg_replace('~>\s,\s<~m', '>, <', ob_get_clean()); ?>
