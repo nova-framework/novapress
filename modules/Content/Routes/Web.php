@@ -38,6 +38,8 @@ Route::paginate('{type}/{slug}', array('uses' => 'Content@taxonomy'))->where('ty
 
 Route::get('{slug}', array('uses' => 'Content@show'))->order(101);
 
+Route::get('content/{id}', 'Content@show')->where('id', '\d+');
+
 // Content unlocking for the Password Protected pages and posts.
 Route::post('content/{id}', 'Content@unlock')->where('id', '\d+');
 
