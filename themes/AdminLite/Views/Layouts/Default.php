@@ -115,9 +115,6 @@ echo Asset::render('js', array(
                 <li <?= ($path == 'authorize') ? 'class="active"' : ''; ?>>
                     <a href='<?= site_url('authorize'); ?>'><i class='fa fa-send'></i> <?= __d('admin_lite', 'On-Time Login'); ?></a>
                 </li>
-                <li <?= ($path == 'password/remind') ? 'class="active"' : ''; ?>>
-                    <a href='<?= site_url('password/remind'); ?>'><i class='fa fa-unlock-alt'></i> <?= __d('admin_lite', 'Forgot Password?'); ?></a>
-                </li>
                 <?php } ?>
             </ul>
         </div>

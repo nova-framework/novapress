@@ -143,14 +143,11 @@ return array(
         'Nova\Session\ConsoleServiceProvider',
 
         // The Shared Providers.
-        'Shared\Auth\Reminders\ReminderServiceProvider',
-        'Shared\Auth\AuthServiceProvider',
         'Shared\Backup\BackupServiceProvider',
         'Shared\Cache\CacheServiceProvider',
         'Shared\DataTable\DataTableServiceProvider',
         'Shared\DomPDF\PdfServiceProvider',
         'Shared\Queue\QueueServiceProvider',
-        'Shared\Routing\RoutingServiceProvider',
         'Shared\Widgets\WidgetServiceProvider',
 
         // The Application Providers.

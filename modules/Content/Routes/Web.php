@@ -29,7 +29,7 @@ Route::paginate('content/archive/{year}/{month}', array(
     ),
 ));
 
-//Route::paginate('/', 'Content@homepage');
+Route::paginate('/', 'Content@homepage');
 
 Route::paginate('content', array('uses' => 'Content@homepage'));
 

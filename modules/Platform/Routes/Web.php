@@ -27,15 +27,6 @@ Route::group(array('middleware' => 'guest'), function ()
 
     Route::get('authorize/{hash}/{time}/{token}', 'TokenLogins@login')->where('time', '\d+');
 
-    // The Password Reminder.
-    Route::get( 'password/remind', 'PasswordReminders@remind');
-    Route::post('password/remind', 'PasswordReminders@postRemind');
-
-    // The Password Reset.
-    Route::post('password/reset', 'PasswordReminders@postReset');
-
-    Route::get('password/reset/{hash}/{time}/{token}', 'PasswordReminders@reset')->where('time', '\d+');
-
     // The Account Registration.
     Route::get( 'register',        'Registrar@create');
     Route::post('register',        'Registrar@store');

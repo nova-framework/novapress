@@ -15,14 +15,6 @@ use Nova\Http\Request;
 
 
 /**
- * The static Pages.
- */
-Route::get('/', 'Pages@show');
-
-Route::get('pages/{slug}', 'Pages@show')->where('slug', '(.*)');
-
-
-/**
  * The Language Changer.
  */
 Route::get('language/{language}', function (Request $request, $language)
