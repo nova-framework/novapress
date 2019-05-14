@@ -146,7 +146,6 @@ return array(
         'Shared\Backup\BackupServiceProvider',
         'Shared\Cache\CacheServiceProvider',
         'Shared\DataTable\DataTableServiceProvider',
-        'Shared\DomPDF\PdfServiceProvider',
         'Shared\Queue\QueueServiceProvider',
         'Shared\Widgets\WidgetServiceProvider',
 
@@ -213,8 +212,6 @@ return array(
         // The Shared Facades.
         'Action'        => 'Shared\Support\Facades\Action',
         'Filter'        => 'Shared\Support\Facades\Filter',
-        'PDF'           => 'Shared\Support\Facades\PDF',
-        'Password'      => 'Shared\Support\Facades\Password',
         'Widget'        => 'Shared\Support\Facades\Widget',
 
         // The Forensics Console.
