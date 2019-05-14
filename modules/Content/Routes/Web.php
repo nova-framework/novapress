@@ -34,7 +34,7 @@ Route::paginate('/', 'Content@homepage');
 Route::paginate('search', 'Content@search');
 
 //
-Route::get('{slug}', 'Content@show')->order(101);
+Route::get('{slug}', 'Content@show')->order(1001);
 
 Route::get('content/{id}', 'Content@show')->where('id', '\d+');
 
@@ -45,7 +45,7 @@ Route::post('content/{id}', 'Content@unlock')->where('id', '\d+');
 Route::post('content/{id}/comment', 'Comments@store')->where('id', '\d+');
 
 // Taxonomies.
-Route::paginate('{type}/{slug}', 'Content@taxonomy')->where('type', Taxonomies::routePattern(false))->order(100);
+Route::paginate('{type}/{slug}', 'Content@taxonomy')->where('type', Taxonomies::routePattern(false))->order(1000);
 
 
 // The Adminstration Routes.

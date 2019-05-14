@@ -19,10 +19,10 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'auth', 'namespace' => '
     Route::get( 'users/fields',              'FieldItems@index');
     Route::get( 'users/fields/create',       'FieldItems@create');
     Route::post('users/fields',              'FieldItems@store');
-    Route::get( 'users/fields/{id}',         'FieldItems@show');
-    Route::get( 'users/fields/{id}/edit',    'FieldItems@edit');
-    Route::post('users/fields/{id}',         'FieldItems@update');
-    Route::post('users/fields/{id}/destroy', 'FieldItems@destroy');
+    Route::get( 'users/fields/{id}',         'FieldItems@show')->where('id', '\d+');
+    Route::get( 'users/fields/{id}/edit',    'FieldItems@edit')->where('id', '\d+');
+    Route::post('users/fields/{id}',         'FieldItems@update')->where('id', '\d+');
+    Route::post('users/fields/{id}/destroy', 'FieldItems@destroy')->where('id', '\d+');
 
     // Server Side Processor for Users DataTable.
     Route::post('users/data',         'Users@data');
@@ -31,8 +31,8 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'auth', 'namespace' => '
     Route::get( 'users',              'Users@index');
     Route::get( 'users/create',       'Users@create');
     Route::post('users',              'Users@store');
-    Route::get( 'users/{id}',         'Users@show');
-    Route::get( 'users/{id}/edit',    'Users@edit');
-    Route::post('users/{id}',         'Users@update');
-    Route::post('users/{id}/destroy', 'Users@destroy');
+    Route::get( 'users/{id}',         'Users@show')->where('id', '\d+');
+    Route::get( 'users/{id}/edit',    'Users@edit')->where('id', '\d+');
+    Route::post('users/{id}',         'Users@update')->where('id', '\d+');
+    Route::post('users/{id}/destroy', 'Users@destroy')->where('id', '\d+');
 });
