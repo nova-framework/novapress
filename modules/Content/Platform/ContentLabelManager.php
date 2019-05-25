@@ -59,7 +59,9 @@ class ContentLabelManager
 
     public function all()
     {
-        return array_values($this->types);
+        $key = $this->getCurrentLocale();
+
+        return Arr::get($this->labels, $key, array());
     }
 
     public function get($type, $name, $default = null)
@@ -71,21 +73,30 @@ class ContentLabelManager
 
     protected function resolveLabels($type)
     {
-        $key = sprintf('%s.%s', $type, $this->getCurrentLocale());
+        $key = sprintf('%s.%s', $this->getCurrentLocale(), $type);
 
-        if (! Arr::has($this->labels, $key) && ! is_null($callback = Arr::get($this->types, $type))) {
-            if (! $callback instanceof Closure) {
-                $callback = array($callback, 'labels');
-            }
-
-            $labels = (array) call_user_func($callback);
-
-            Arr::set($this->labels, $key, $labels);
-
-            return $labels;
+        if (Arr::has($this->labels, $key)) {
+            return Arr::get($this->labels, $key, array());
         }
 
-        return Arr::get($this->labels, $key, array());
+        //
+        else if (is_null($callback = Arr::get($this->types, $type))) {
+           return array();
+        }
+
+        $result = call_user_func(
+            ($callback instanceof Closure) ? $callback : array($callback, 'labels')
+        );
+
+        $labels = array_filter((array) $result, function ($key)
+        {
+            return (($key == 'name') || ($key == 'title'));
+
+        }, ARRAY_FILTER_USE_KEY);
+
+        Arr::set($this->labels, $key, $labels);
+
+        return $labels;
     }
 
     protected function getCurrentLocale()
