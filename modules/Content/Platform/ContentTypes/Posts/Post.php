@@ -72,7 +72,7 @@ class Post extends BasePost
     /**
      * @return array
      */
-    public static function labels()
+    public function labels()
     {
         return array(
             'name'        => __d('content', 'Post'),

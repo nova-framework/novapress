@@ -76,7 +76,7 @@ abstract class ContentType
 
     abstract public function description();
 
-    abstract public static function labels();
+    abstract public function labels();
 
     public function label($name, $default = null)
     {

@@ -6,6 +6,7 @@ use Nova\Container\Container;
 use Nova\Support\Arr;
 
 use Modules\Content\Models\MenuItem;
+use Modules\Support\Facades\ContentLabel;
 
 use Closure;
 use InvalidArgumentException;
@@ -33,10 +34,12 @@ abstract class ContentTypeManager
 
     public function forget($type)
     {
-        unset($this->types[$type]);
+        ContentLabel::forget($type);
+
+        MenuItem::forgetInstanceRelation($type);
 
         //
-        MenuItem::forgetInstanceRelation($type);
+        unset($this->types[$type]);
     }
 
     public function make($type)

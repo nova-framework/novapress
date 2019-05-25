@@ -103,9 +103,9 @@ class ModuleServiceProvider extends ServiceProvider
             $type = Arr::pull($options, 'uses');
 
             //
-            PostType::register($type, $options);
+            $instance = PostType::register($type, $options);
 
-            ContentLabel::register($name, $type);
+            ContentLabel::register($name, $instance);
         }
     }
 
@@ -120,9 +120,9 @@ class ModuleServiceProvider extends ServiceProvider
             $type = Arr::pull($options, 'uses');
 
             //
-            TaxonomyType::register($type, $options);
+            $instance = TaxonomyType::register($type, $options);
 
-            ContentLabel::register($name, $type);
+            ContentLabel::register($name, $instance);
         }
     }
 

@@ -34,5 +34,7 @@ class PostTypeManager extends ContentTypeManager
         if ($postType->showInNavMenus()) {
             MenuItem::registerInstanceRelation($type, $postType->model());
         }
+
+        return $postType;
     }
 }

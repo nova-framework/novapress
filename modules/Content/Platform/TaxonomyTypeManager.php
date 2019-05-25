@@ -34,5 +34,7 @@ class TaxonomyTypeManager extends ContentTypeManager
         if ($taxonomyType->showInNavMenus()) {
             MenuItem::registerInstanceRelation($type, $taxonomyType->model());
         }
+
+        return $taxonomyType;
     }
 }

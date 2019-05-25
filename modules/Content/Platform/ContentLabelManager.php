@@ -36,7 +36,9 @@ class ContentLabelManager
 
     public function register($type, $callback)
     {
-        if ((! $callback instanceof Closure) && ! is_subclass_of($callback, $baseClass = ContentType::class)) {
+        $baseClass = ContentType::class;
+
+        if ((! $callback instanceof Closure) && (! $callback instanceof $baseClass)) {
             throw new InvalidArgumentException("The callback must be a a closure or a subclass of [{$baseClass}]");
         }
 
@@ -62,24 +64,28 @@ class ContentLabelManager
 
     public function get($type, $name, $default = null)
     {
+        $labels = $this->resolveLabels($type);
+
+        return Arr::get($labels, $name, $default);
+    }
+
+    protected function resolveLabels($type)
+    {
         $key = sprintf('%s.%s', $type, $this->getCurrentLocale());
 
         if (! Arr::has($this->labels, $key) && ! is_null($callback = Arr::get($this->types, $type))) {
-            if ($callback instanceof Closure) {
-                $labels = call_user_func($callback);
-            } else {
-                $labels = forward_static_call(array($callback, 'labels'));
+            if (! $callback instanceof Closure) {
+                $callback = array($callback, 'labels');
             }
 
-            Arr::set($this->labels, $key, (array) $labels);
+            $labels = (array) call_user_func($callback);
+
+            Arr::set($this->labels, $key, $labels);
+
+            return $labels;
         }
 
-        // The labels are already cached locally or the Content Type is not registered.
-        else {
-            $labels = Arr::get($this->labels, $key, array());
-        }
-
-        return Arr::get($labels, $name, $default);
+        return Arr::get($this->labels, $key, array());
     }
 
     protected function getCurrentLocale()
