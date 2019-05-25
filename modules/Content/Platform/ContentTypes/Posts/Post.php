@@ -60,6 +60,11 @@ class Post extends BasePost
         'items' => 'posts'
     );
 
+    /**
+     * @var array
+     */
+    protected $taxonomies = array('category', 'post_tag');
+
 
     /**
      * @return string

@@ -18,6 +18,11 @@ abstract class Post extends ContentType
      */
     protected $hasArchive = true;
 
+    /**
+     * @var array
+     */
+    protected $taxonomies = array();
+
 
     public function __construct(PostTypeManager $manager, array $options)
     {
@@ -32,5 +37,10 @@ abstract class Post extends ContentType
     public function hasArchive()
     {
         return $this->hasArchive;
+    }
+
+    public function taxonomies()
+    {
+        return $this->taxonomies;
     }
 }
