@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 // Define The Application Version
 //--------------------------------------------------------------------------
 
-define('VERSION', '1.0.8');
+define('VERSION', '1.0.9');
 
 //--------------------------------------------------------------------------
 // Set PHP Error Reporting Options

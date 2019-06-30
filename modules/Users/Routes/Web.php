@@ -21,10 +21,10 @@ Route::post('logout', array('middleware' => 'auth',  'uses' => 'Authorize@logout
 Route::group(array('middleware' => 'guest'), function ()
 {
     // The One-Time Authentication.
-    Route::get( 'authorize', 'TokenLogins@index');
-    Route::post('authorize', 'TokenLogins@process');
+    Route::get( 'authorize', 'Tokens@index');
+    Route::post('authorize', 'Tokens@process');
 
-    Route::get('authorize/{hash}/{time}/{token}', 'TokenLogins@login');
+    Route::get('authorize/{hash}/{time}/{token}', 'Tokens@login');
 
     // The Account Registration.
     Route::get( 'register',        'Registrar@create');
