@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Platform\Models;
+namespace App\Models;
 
 use Nova\Database\ORM\Model as BaseModel;
 use Nova\Database\QueryException;
@@ -57,10 +57,7 @@ class Option extends BaseModel
         try {
             return $instance->newQuery()->get();
         }
-        catch (QueryException $e) {
-            //
-        }
-        catch (PDOException $e) {
+        catch (PDOException | QueryException $e) {
             //
         }
 
