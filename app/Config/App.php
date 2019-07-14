@@ -25,7 +25,7 @@ return array(
     /**
      * Website Name.
      */
-    'name' => 'Nova Press',
+    'name' => 'Nova Press 1.1',
 
     /**
      * The default Theme.
