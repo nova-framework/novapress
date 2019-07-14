@@ -2,7 +2,7 @@
     <h1><?= __d('messages', 'Show Message'); ?></h1>
     <ol class="breadcrumb">
         <li><a href="<?= site_url('dashboard'); ?>"><i class="fa fa-dashboard"></i> <?= __d('messages', 'Dashboard'); ?></a></li>
-        <li><a href="<?= site_url('messages'); ?>"><?= __d('backend', 'Messages'); ?></a></li>
+        <li><a href="<?= site_url('messages'); ?>"><?= __d('messages', 'Messages'); ?></a></li>
         <li><?= __d('messages', 'Show Message'); ?></li>
     </ol>
 </section>
@@ -70,7 +70,7 @@
         </div>
     </div>
 
-    <a class="btn btn-primary col-sm-2" href="<?= site_url('messages'); ?>"><?= __d('backend', '<< Previous Page'); ?></a>
+    <a class="btn btn-primary col-sm-2" href="<?= site_url('messages'); ?>"><?= __d('messages', '<< Previous Page'); ?></a>
 
     <div class="clearfix"></div>
     <br>
