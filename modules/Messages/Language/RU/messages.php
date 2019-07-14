@@ -12,7 +12,7 @@ return array (
   'No messages' => 'Нет сообщений',
   'Receiver' => 'Получатель',
   'Reply' => 'Ответить',
-  'Reply to this {0, select, 0 {message} other {thread}}...' => 'Ответить на этот {0, select, 0 {message} other {thread}}',
+  'Reply to this {0, select, 0 {message} other {thread}}...' => 'Ответить на {0, select, 0 {сообщение} other {тему}}',
   'Required field' => 'Обязательные поля',
   'Send' => 'Отправить',
   'Send Message' => 'Отправить сообщение',
@@ -25,5 +25,5 @@ return array (
   'View this message and its replies' => 'Посмотреть это сообщение и его ответы',
   'You have no messages sent or received.' => 'У вас вообще нет сообщений: ни отправленных,ни полученных.',
   'You must type a reply first!' => 'Сначала вы должны ввести ответ!',
-  '{0, plural, one{# reply} other{# replies}}' => '{0, plural, one{# reply} other{# replies}}',
+  '{0, plural, one{# reply} other{# replies}}' => '{0, plural, one{# ответ} other{# ответа-(ов)}}',
 );
