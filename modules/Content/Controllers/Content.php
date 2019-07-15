@@ -69,9 +69,9 @@ class Content extends BaseController
 
             // If the Post is a Revision.
             else if ((($post->type === 'revision') || ($post->type === 'attachment')) && ($post->status === 'inherit')) {
-                $parent = $post->parent()->first();
+                $post->load('parent');
 
-                if (! in_array($parent->status, array('publish', 'password'))) {
+                if (! in_array($post->parent->status, array('publish', 'password'))) {
                     return null;
                 }
             }
@@ -83,7 +83,9 @@ class Content extends BaseController
             App::abort(404);
         }
 
-        $postType = PostType::make($post->type);
+        $postType = PostType::make(
+            ($post->type === 'revision') ? $post->parent->type : $post->type
+        );
 
         if (! $postType->isPublic() && Auth::guest()) {
             App::abort(403);
