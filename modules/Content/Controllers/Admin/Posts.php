@@ -428,11 +428,17 @@ class Posts extends BaseController
             return Redirect::back()->with('danger', __d('content', 'Record not found: #{0}', $id));
         }
 
+        if ($post->type == 'revision') {
+            return $this->deleteRevision($post);
+        }
+
         $postType = PostType::make($post->type);
 
         // Fire the starting event.
         Event::dispatch('content.post.deleting', array($post));
 
+        if ($type == 'revision') {
+        }
         // Delete the Post.
         $taxonomies = $post->taxonomies;
 
@@ -455,6 +461,26 @@ class Posts extends BaseController
             ->with('success', __d('content', 'The {0} <b>#{1}</b> was successfully deleted.', $postType->label('name'), $post->id));
     }
 
+    protected function deleteRevision(Post $revision)
+    {
+        if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) === 1) {
+            $version = (int) $matches[1];
+        } else {
+            $version = 0;
+        }
+
+        $post = $revision->parent()->first();
+
+        // Delete the Post revision.
+        $revision->delete();
+
+        //
+        $postType = PostType::make($post->type);
+
+        return Redirect::back()
+            ->with('success', __d('content', 'The Revision <b>{0}</b> of {1} <b>#{2}</b> was successfully deleted.', $version, $postType->label('name'), $post->id));
+    }
+
     public function restore($id)
     {
         try {
@@ -473,6 +499,8 @@ class Posts extends BaseController
         $post->excerpt = $revision->excerpt;
         $post->title   = $revision->title;
 
+        $post->save();
+
         // Handle the MetaData.
         if (! preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches)) {
             $version = 0;
@@ -480,13 +508,11 @@ class Posts extends BaseController
             $post->saveMeta('version', $version = (int) $matches[1]);
         }
 
-        $post->save();
-
         // Invalidate the content caches.
         $this->clearContentCache();
 
         //
-        $status = __d('content', 'The {0} <b>#{1}</b> was successfully restored to the revision: <b>{2}</b>', $postType->label('name'), $post->id, $post->meta->$version);
+        $status = __d('content', 'The {0} <b>#{1}</b> was successfully restored to the revision: <b>{2}</b>', $postType->label('name'), $post->id, $version);
 
         return Redirect::back()->with('success', $status);
     }

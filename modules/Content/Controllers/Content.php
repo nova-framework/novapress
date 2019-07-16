@@ -84,7 +84,7 @@ class Content extends BaseController
         }
 
         $postType = PostType::make(
-            ($post->type === 'revision') ? $post->parent->type : $post->type
+            ($post->type == 'revision') ? $post->parent->type : $post->type
         );
 
         if (! $postType->isPublic() && Auth::guest()) {
