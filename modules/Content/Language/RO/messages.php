@@ -282,6 +282,7 @@ return array (
   'The Menu Item(s) was successfully created.' => '',
   'The Menu Items order was successfully updated.' => '',
   'The Menu {0} was successfully deleted.' => '',
+  'The Revision <b>{0}</b> of {1} <b>#{2}</b> was successfully deleted.' => '',
   'The password is not valid.' => '',
   'The reCaptcha verification failed.' => '',
   'The registered {0}' => '',
