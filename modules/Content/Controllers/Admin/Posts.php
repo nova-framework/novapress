@@ -463,15 +463,14 @@ class Posts extends BaseController
 
     protected function deleteRevision(Post $revision)
     {
-        if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) === 1) {
-            $version = (int) $matches[1];
-        } else {
-            $version = 0;
-        }
-
         $post = $revision->parent()->first();
 
-        // Delete the Post revision.
+        if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) !== 1) {
+            $version = 0;
+        } else {
+            $version = (int) $matches[1];
+        }
+
         $revision->delete();
 
         //
@@ -484,15 +483,13 @@ class Posts extends BaseController
     public function restore($id)
     {
         try {
-            $revision = Post::with('parent')->where('type', 'revision')->findOrFail($id);
+            $revision = Post::where('type', 'revision')->findOrFail($id);
         }
         catch (ModelNotFoundException $e) {
             return Redirect::back()->with('danger', __d('content', 'Record not found: #{0}', $id));
         }
 
-        $post = $revision->parent;
-
-        $postType = PostType::make($post->type);
+        $post = $revision->parent()->first();
 
         // Restore the Post's title, content and excerpt.
         $post->content = $revision->content;
@@ -502,7 +499,7 @@ class Posts extends BaseController
         $post->save();
 
         // Handle the MetaData.
-        if (! preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches)) {
+        if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) !== 1) {
             $version = 0;
         } else {
             $post->saveMeta('version', $version = (int) $matches[1]);
@@ -512,6 +509,8 @@ class Posts extends BaseController
         $this->clearContentCache();
 
         //
+        $postType = PostType::make($post->type);
+
         $status = __d('content', 'The {0} <b>#{1}</b> was successfully restored to the revision: <b>{2}</b>', $postType->label('name'), $post->id, $version);
 
         return Redirect::back()->with('success', $status);
