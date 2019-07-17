@@ -371,15 +371,19 @@ class Posts extends BaseController
         }
 
         // Create a new revision from the current Post instance.
-        $count = 1;
+        $count = 0;
 
         $names = $post->revision()->lists('name');
 
         foreach ($names as $name) {
-            if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $name, $matches) === 1) {
-                $count = max($count, 1 + (int) $matches[1]);
+            if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $name, $matches) !== 1) {
+                continue;
             }
+
+            $count = max($count, (int) $matches[1]);
         }
+
+        $count++;
 
         $slug = $post->id .'-revision-v' .$count;
 
