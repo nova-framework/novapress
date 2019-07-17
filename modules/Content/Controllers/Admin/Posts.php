@@ -441,14 +441,10 @@ class Posts extends BaseController
         // Fire the starting event.
         Event::dispatch('content.post.deleting', array($post));
 
-        if ($type == 'revision') {
-        }
         // Delete the Post.
-        $taxonomies = $post->taxonomies;
-
         $post->taxonomies()->detach();
 
-        $taxonomies->each(function ($taxonomy)
+        $post->taxonomies->each(function ($taxonomy)
         {
             $taxonomy->updateCount();
         });
@@ -467,15 +463,14 @@ class Posts extends BaseController
 
     protected function deleteRevision(Post $revision)
     {
+        $post = $revision->parent()->first();
+
         if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) !== 1) {
             $version = 0;
         } else {
             $version = (int) $matches[1];
         }
 
-        $post = $revision->parent()->first();
-
-        // Delete the Post Revision.
         $revision->delete();
 
         //
