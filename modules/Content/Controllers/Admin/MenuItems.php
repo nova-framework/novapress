@@ -139,7 +139,7 @@ class MenuItems extends BaseController
         }
 
         // Invalidate the cached menu data.
-        Cache::forget('content.menus.' .$menu->slug);
+        Cache::section('content')->forget('menus.' .$menu->slug);
 
         return Redirect::back()->with('success', __d('content', 'The Menu Item was successfully updated.'));
     }
@@ -170,7 +170,7 @@ class MenuItems extends BaseController
         $taxonomy->updateCount();
 
         // Invalidate the cached menu data.
-        Cache::forget('content.menus.' .$taxonomy->slug);
+        Cache::section('content')->forget('menus.' .$taxonomy->slug);
 
         return Redirect::back()->with('success', __d('content', 'The Menu Item was successfully deleted.'));
     }
@@ -191,7 +191,7 @@ class MenuItems extends BaseController
         );
 
         // Invalidate the cached menu data.
-        Cache::forget('content.menus.' .$taxonomy->slug);
+        Cache::section('content')->forget('menus.' .$taxonomy->slug);
 
         return Redirect::back()->with('success', __d('content', 'The Menu Items order was successfully updated.'));
     }

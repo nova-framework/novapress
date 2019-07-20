@@ -46,7 +46,7 @@ class Blocks extends BaseController
         }
 
         // Invalidate the cached menu data.
-        Cache::forget('content.blocks');
+        Cache::section('content')->forget('blocks');
 
         return Redirect::back()
             ->with('success', __d('content', 'The Blocks order, from the position <b>{0}</b>, was successfully updated.', $position));

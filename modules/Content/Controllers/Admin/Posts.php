@@ -410,7 +410,7 @@ class Posts extends BaseController
         $post->saveMeta('edit_lock', null);
 
         // Invalidate the content caches.
-        $this->clearContentCache();
+        Cache::section('content')->flush();
 
         //
         Session::flash(
@@ -455,7 +455,7 @@ class Posts extends BaseController
         Event::dispatch('content.post.deleted', array($post));
 
         // Invalidate the content caches.
-        $this->clearContentCache();
+        Cache::section('content')->flush();
 
         return Redirect::back()
             ->with('success', __d('content', 'The {0} <b>#{1}</b> was successfully deleted.', $postType->label('name'), $post->id));
@@ -506,7 +506,7 @@ class Posts extends BaseController
         }
 
         // Invalidate the content caches.
-        $this->clearContentCache();
+        Cache::section('content')->flush();
 
         //
         $postType = PostType::make($post->type);
@@ -720,11 +720,6 @@ class Posts extends BaseController
         }
 
         return $result;
-    }
-
-    protected function clearContentCache()
-    {
-        Cache::section('content')->flush();
     }
 
     protected function getDefaultThemeStylesheets()

@@ -141,7 +141,7 @@ class Taxonomies extends BaseController
         ));
 
         // Invalidate the content caches.
-        $this->clearContentCache($type);
+        Cache::section('content')->flush();
 
         if ($ajaxRespose) {
             // The request was made by the Post Editor via AJAX, so we will return a fresh taxonomies selector.
@@ -213,7 +213,7 @@ class Taxonomies extends BaseController
         $taxonomy->save();
 
         // Invalidate the content caches.
-        $this->clearContentCache($type);
+        Cache::section('content')->flush();
 
         //
         $taxonomyType = TaxonomyType::make($type);
@@ -243,10 +243,10 @@ class Taxonomies extends BaseController
         $taxonomy->delete();
 
         // Invalidate the content caches.
-        $this->clearContentCache($type = $taxonomy->taxonomy);
+        Cache::section('content')->flush();
 
         //
-        $taxonomyType = TaxonomyType::make($type);
+        $taxonomyType = TaxonomyType::make($taxonomy->taxonomy);
 
         $name = $taxonomyType->label('name');
 
@@ -320,10 +320,5 @@ class Taxonomies extends BaseController
         }
 
         return $result;
-    }
-
-    protected function clearContentCache($type)
-    {
-        Cache::forget('content.taxonomies.' .$type);
     }
 }
