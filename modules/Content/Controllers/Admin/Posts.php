@@ -624,7 +624,7 @@ class Posts extends BaseController
     public function detachTag(Request $request, $id, $tagId)
     {
         try {
-            $post = Post::findOrFail($id);
+            $post = Post::with('taxonomies')->findOrFail($id);
         }
         catch (ModelNotFoundException $e) {
             return Response::json(array('error' => 'Not Found'), 400);
@@ -733,7 +733,10 @@ class Posts extends BaseController
 
         $theme = Config::get('app.theme');
 
-        $results = Event::dispatch('content.editor.stylesheets.' .Str::snake($theme), array($theme));
+        //
+        $event = sprintf('content.editor.stylesheets.%s', Str::snake($theme));
+
+        $results = Event::dispatch($event, array($theme));
 
         foreach ($results as $result) {
             if (is_array($result) && ! empty($result)) {
