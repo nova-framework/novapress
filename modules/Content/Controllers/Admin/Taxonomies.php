@@ -65,7 +65,9 @@ class Taxonomies extends BaseController
 
         Validator::extend('valid_text', function($attribute, $value, $parameters)
         {
-            return ($value == strip_tags($value));
+            $value = trim(preg_replace('/[\s]+/mu', ' ', $value));
+
+            return ! empty($value) ? ($value == strip_tags($value)) : false;
         });
 
         return Validator::make($data, $rules, $messages, $attributes);
@@ -116,7 +118,7 @@ class Taxonomies extends BaseController
         $type = Arr::get($input, 'taxonomy');
 
         //
-        $name = Arr::get($input, 'name');
+        $name = trim(preg_replace('/[\s]+/mu', ' ', Arr::get($input, 'name')));
 
         if (empty($slug = Arr::get($input, 'slug'))) {
             $slug = Term::uniqueSlug($name, $type);
@@ -193,7 +195,7 @@ class Taxonomies extends BaseController
             return Redirect::back()->with('danger', __d('content', 'The requested Taxonomy type [{0}] does not match.', $type));
         }
 
-        $name = Arr::get($input, 'name');
+        $name = trim(preg_replace('/[\s]+/mu', ' ', Arr::get($input, 'name')));
 
         if (empty($slug = Arr::get($input, 'slug'))) {
             $slug = Term::uniqueSlug($name, $type, $taxonomy->id);

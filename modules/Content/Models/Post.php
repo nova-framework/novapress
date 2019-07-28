@@ -143,7 +143,7 @@ class Post extends Model
     /**
      * @return \Nova\Database\ORM\Relations\HasMany
      */
-    public function attachment()
+    public function attachments()
     {
         return $this->hasMany('Modules\Content\Models\Post', 'parent_id')->where('type', 'attachment');
     }
@@ -151,7 +151,7 @@ class Post extends Model
     /**
      * @return \Nova\Database\ORM\Relations\HasMany
      */
-    public function revision()
+    public function revisions()
     {
         return $this->hasMany('Modules\Content\Models\Post', 'parent_id')->where('type', 'revision');
     }
