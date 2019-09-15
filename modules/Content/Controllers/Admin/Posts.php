@@ -540,73 +540,67 @@ class Posts extends BaseController
 
     public function addTags(Request $request, $id)
     {
-        if (! $request->has('tags')) {
-            return Response::json(array('error' => __d('content', 'The Tags value is required')), 400);
-        }
-
         try {
-            $post = Post::findOrFail($postId);
+            $post = Post::with('taxonomies')->findOrFail($id);
         }
         catch (ModelNotFoundException $e) {
             return Response::json(array('error' => __d('content', 'Record not found: #{0}', $id)), 400);
         }
 
-        // The tags value is something like: 'Sample Tag, Another Tag, Testings'
+        $taxonomies = $post->taxonomies->where('taxonomy', 'post_tag');
 
-        $tags = array_filter(array_map(function ($tag)
+        if (empty($value = $request->input('tags'))) {
+            return Response::json(array('error' => __d('content', 'The Tags value is required')), 400);
+        }
+
+        $names = array_map(function ($tag)
         {
             return trim(preg_replace('/[\s]+/mu', ' ', $tag));
 
-        }, explode(',', $request->input('tags'))));
+        }, explode(',', $value));
 
-        // Get the actual Tag instances associated to this Post.
-        $taxonomies = $post->taxonomies()->where('taxonomy', 'post_tag')->get();
+        $results = array();
 
-        $results = array_map(function ($name) use ($post, $taxonomies)
-        {
-            $taxonomy = $this->findOrCreateTaxonomy($name);
-
-            if (! $taxonomies->find($taxonomy)) {
-                $post->taxonomies()->attach($taxonomy);
-
-                $taxonomy->updateCount();
+        foreach ($names as $names) {
+            if (! is_null($taxonomy = $taxonomies->where('name', $name)->first())) {
+                continue;
             }
 
-            return array(
+            $taxonomy = Taxonomy::with('term')->where('taxonomy', 'post_tag')->whereHas('term', function ($query) use ($name)
+            {
+                $query->where('name', $name);
+
+            })->firstOr(function () use ($name)
+            {
+                $slug = Term::uniqueSlug($name, 'post_tag');
+
+                $term = Term::create(array(
+                    'name'   => $name,
+                    'slug'   => $slug,
+                ));
+
+                $taxonomy = Taxonomy::create(array(
+                    'term_id'     => $term->id,
+                    'taxonomy'    => 'post_tag',
+                    'description' => '',
+                ));
+
+                $taxonomy->load('term');
+
+                return $taxonomy;
+            });
+
+            $post->taxonomies()->attach($taxonomy);
+
+            $taxonomy->updateCount();
+
+            array_push($results, array(
                 'id'   => $taxonomy->id,
                 'name' => $taxonomy->name
-            );
-
-        }, $tags);
-
-        return Response::json($result, 200);
-    }
-
-    protected function findOrCreateTag($name)
-    {
-        return Taxonomy::with('term')->where('taxonomy', 'post_tag')->whereHas('term', function ($query) use ($name)
-        {
-            $query->where('name', $name);
-
-        })->firstOr(function () use ($name)
-        {
-            $slug = Term::uniqueSlug($name, 'post_tag');
-
-            $term = Term::create(array(
-                'name'   => $name,
-                'slug'   => $slug,
             ));
+        }
 
-            $taxonomy = Taxonomy::create(array(
-                'term_id'     => $term->id,
-                'taxonomy'    => 'post_tag',
-                'description' => '',
-            ));
-
-            $taxonomy->load('term');
-
-            return $taxonomy;
-        });
+        return Response::json($results, 200);
     }
 
     public function detachTag(Request $request, $id, $tagId)
