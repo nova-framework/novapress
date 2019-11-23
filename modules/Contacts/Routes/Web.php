@@ -25,9 +25,9 @@ Route::get('contacts/{method}/{token}/{filename}', array(
 
 // The administration group's wheres.
 $wheres = array(
-    'id'  => '\d+',
-    'cid' => '\d+',
-    'gid' => '\d+'
+    'id'  => '(\d+)',
+    'cid' => '(\d+)',
+    'gid' => '(\d+)'
 );
 
 // The Adminstration Routes.

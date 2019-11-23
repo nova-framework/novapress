@@ -24,8 +24,8 @@ Route::paginate('archive/{year}/{month}', array(
     'uses' => 'Content@archive',
 
     'where' => array(
-        'year'  => '\d+',
-        'month' => '\d+',
+        'year'  => '(\d+)',
+        'month' => '(\d+)',
     ),
 ));
 
@@ -33,23 +33,23 @@ Route::paginate('/', 'Content@homepage');
 
 Route::paginate('search', 'Content@search');
 
-//
-Route::get('{slug}', 'Content@show')->order(1001);
+// The site fallback route.
+Route::get('{slug}', 'Content@show')->fallback();
 
-Route::get('content/{id}', 'Content@show')->where('id', '\d+');
+Route::get('content/{id}', 'Content@show')->where('id', '(\d+)');
 
 // Content unlocking for the Password Protected pages and posts.
-Route::post('content/{id}', 'Content@unlock')->where('id', '\d+');
+Route::post('content/{id}', 'Content@unlock')->where('id', '(\d+)');
 
 // Comments.
-Route::post('content/{id}/comment', 'Comments@store')->where('id', '\d+');
+Route::post('content/{id}/comment', 'Comments@store')->where('id', '(\d+)');
 
 // Taxonomies.
-Route::paginate('{type}/{slug}', 'Content@taxonomy')->where('type', Taxonomies::routePattern(false))->order(1000);
+Route::paginate('{type}/{slug}', 'Content@taxonomy')->where('type', Taxonomies::routePattern(false));
 
 
 // The Adminstration Routes.
-Route::group(array('prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Admin', 'where' => array('id'  => '\d+')), function ()
+Route::group(array('prefix' => 'admin', 'middleware' => 'auth', 'namespace' => 'Admin', 'where' => array('id'  => '(\d+)')), function ()
 {
     // The Media CRUD.
     Route::get( 'media',                'Attachments@index');
@@ -101,7 +101,7 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'auth', 'namespace' => '
 
     Route::post('content/{id}/tags', 'Posts@addTags');
 
-    Route::post('content/{id}/tags/{tagId}/detach', 'Posts@detachTag')->where('tagId', '\d+');
+    Route::post('content/{id}/tags/{tagId}/detach', 'Posts@detachTag')->where('tagId', '(\d+)');
 
     // The Posts listing.
     Route::get('content/{type}', 'Posts@index')->where('type', Posts::routePattern(true));
@@ -115,7 +115,7 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'auth', 'namespace' => '
     Route::post('taxonomies/{id}/destroy', 'Taxonomies@destroy');
 
     // For AJAX.
-    Route::get('taxonomies/{id}/{parentId}', 'Taxonomies@data')->where('parentId', '\d+');
+    Route::get('taxonomies/{id}/{parentId}', 'Taxonomies@data')->where('parentId', '(\d+)');
 
     // The Taxonomies listings.
     Route::get('taxonomies/{type}', 'Taxonomies@index')->where('type', Taxonomies::routePattern(true));
