@@ -99,9 +99,13 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'auth', 'namespace' => '
 
     Route::get( 'content/{id}/revisions', 'Posts@revisions');
 
-    Route::post('content/{id}/tags', 'Posts@addTags');
+    // The Post editor's Tags management
+    Route::group(array('namespace' => 'Editor'), function ()
+    {
+        Route::post('content/{id}/tags', 'Tags@attach');
 
-    Route::post('content/{id}/tags/{tagId}/detach', 'Posts@detachTag')->where('tagId', '(\d+)');
+        Route::post('content/{id}/tags/{tagId}/detach', 'Tags@detach')->where('tagId', '(\d+)');
+    });
 
     // The Posts listing.
     Route::get('content/{type}', 'Posts@index')->where('type', Posts::routePattern(true));
