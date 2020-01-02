@@ -3,6 +3,7 @@
 namespace Modules\Content\Controllers\Admin;
 
 use Nova\Database\ORM\ModelNotFoundException;
+use Nova\Support\Facades\Cache;
 use Nova\Support\Facades\Redirect;
 
 use Modules\Content\Models\Post;
@@ -31,7 +32,7 @@ class Revisions extends BaseController
         //
         $name = $postType->label('name');
 
-        return $this->createView(compact('type', 'name', 'post', 'revisions'))
+        return $this->createView(compact('name', 'post', 'revisions', 'postType'))
             ->shares('title', __d('content', 'Revisions of the {0} : {1}', $name, $post->title));
     }
 
@@ -58,6 +59,42 @@ class Revisions extends BaseController
         $postType = PostType::make($post->type);
 
         $status = __d('content', 'The Revision <b>{0}</b> of {1} <b>#{2}</b> was successfully deleted.', $version, $postType->label('name'), $post->id);
+
+        return Redirect::back()->with('success', $status);
+    }
+
+    public function restore($id)
+    {
+        try {
+            $revision = Post::where('type', 'revision')->findOrFail($id);
+        }
+        catch (ModelNotFoundException $e) {
+            return Redirect::back()->with('danger', __d('content', 'Record not found: #{0}', $id));
+        }
+
+        $post = $revision->parent()->first();
+
+        // Restore the Post's title, content and excerpt.
+        $post->content = $revision->content;
+        $post->excerpt = $revision->excerpt;
+        $post->title   = $revision->title;
+
+        $post->save();
+
+        // Handle the MetaData.
+        if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) !== 1) {
+            $version = 0;
+        } else {
+            $post->saveMeta('version', $version = (int) $matches[1]);
+        }
+
+        // Invalidate the content caches.
+        Cache::section('content')->flush();
+
+        //
+        $postType = PostType::make($post->type);
+
+        $status = __d('content', 'The {0} <b>#{1}</b> was successfully restored to the revision: <b>{2}</b>', $postType->label('name'), $post->id, $version);
 
         return Redirect::back()->with('success', $status);
     }

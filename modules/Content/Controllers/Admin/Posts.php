@@ -455,42 +455,6 @@ class Posts extends BaseController
             ->with('success', __d('content', 'The {0} <b>#{1}</b> was successfully deleted.', $postType->label('name'), $post->id));
     }
 
-    public function restore($id)
-    {
-        try {
-            $revision = Post::where('type', 'revision')->findOrFail($id);
-        }
-        catch (ModelNotFoundException $e) {
-            return Redirect::back()->with('danger', __d('content', 'Record not found: #{0}', $id));
-        }
-
-        $post = $revision->parent()->first();
-
-        // Restore the Post's title, content and excerpt.
-        $post->content = $revision->content;
-        $post->excerpt = $revision->excerpt;
-        $post->title   = $revision->title;
-
-        $post->save();
-
-        // Handle the MetaData.
-        if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) !== 1) {
-            $version = 0;
-        } else {
-            $post->saveMeta('version', $version = (int) $matches[1]);
-        }
-
-        // Invalidate the content caches.
-        Cache::section('content')->flush();
-
-        //
-        $postType = PostType::make($post->type);
-
-        $status = __d('content', 'The {0} <b>#{1}</b> was successfully restored to the revision: <b>{2}</b>', $postType->label('name'), $post->id, $version);
-
-        return Redirect::back()->with('success', $status);
-    }
-
     protected function generateCategories(array $categories = array(), $taxonomies = null, $level = 0)
     {
         $result = '';

@@ -95,11 +95,11 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'auth', 'namespace' => '
     Route::get( 'content/{id}/edit',    'Posts@edit');
     Route::post('content/{id}',         'Posts@update');
     Route::post('content/{id}/destroy', 'Posts@destroy');
-    Route::post('content/{id}/restore', 'Posts@restore');
 
     // The Post Revisions CRUD.
     Route::get( 'content/{id}/revisions', 'Revisions@index');
     Route::post('content/{id}/revisions', 'Revisions@destroy');
+    Route::post('content/{id}/restore',   'Revisions@restore');
 
     // The Post editor's Tags management
     Route::group(array('namespace' => 'Editor'), function ()
