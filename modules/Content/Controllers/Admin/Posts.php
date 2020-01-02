@@ -376,11 +376,9 @@ class Posts extends BaseController
         $names = $post->revisions()->lists('name');
 
         foreach ($names as $name) {
-            if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $name, $matches) !== 1) {
-                continue;
+            if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $name, $matches) === 1) {
+                $count = max($count, (int) $matches[1]);
             }
-
-            $count = max($count, (int) $matches[1]);
         }
 
         $count++;
@@ -432,10 +430,6 @@ class Posts extends BaseController
             return Redirect::back()->with('danger', __d('content', 'Record not found: #{0}', $id));
         }
 
-        if ($post->type == 'revision') {
-            return $this->deleteRevision($post);
-        }
-
         $postType = PostType::make($post->type);
 
         // Fire the starting event.
@@ -459,25 +453,6 @@ class Posts extends BaseController
 
         return Redirect::back()
             ->with('success', __d('content', 'The {0} <b>#{1}</b> was successfully deleted.', $postType->label('name'), $post->id));
-    }
-
-    protected function deleteRevision(Post $revision)
-    {
-        $post = $revision->parent()->first();
-
-        if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) !== 1) {
-            $version = 0;
-        } else {
-            $version = (int) $matches[1];
-        }
-
-        $revision->delete();
-
-        //
-        $postType = PostType::make($post->type);
-
-        return Redirect::back()
-            ->with('success', __d('content', 'The Revision <b>{0}</b> of {1} <b>#{2}</b> was successfully deleted.', $version, $postType->label('name'), $post->id));
     }
 
     public function restore($id)
@@ -514,28 +489,6 @@ class Posts extends BaseController
         $status = __d('content', 'The {0} <b>#{1}</b> was successfully restored to the revision: <b>{2}</b>', $postType->label('name'), $post->id, $version);
 
         return Redirect::back()->with('success', $status);
-    }
-
-    public function revisions($id)
-    {
-        try {
-            $post = Post::findOrFail($id);
-        }
-        catch (ModelNotFoundException $e) {
-            return Redirect::back()->with('danger', __d('content', 'Record not found: #{0}', $id));
-        }
-
-        $postType = PostType::make($post->type);
-
-        $revisions = $post->revisions()
-            ->orderBy('created_at', 'desc')
-            ->paginate(25);
-
-        //
-        $name = $postType->label('name');
-
-        return $this->createView(compact('type', 'name', 'post', 'revisions'))
-            ->shares('title', __d('content', 'Revisions of the {0} : {1}', $name, $post->title));
     }
 
     protected function generateCategories(array $categories = array(), $taxonomies = null, $level = 0)

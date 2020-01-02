@@ -206,7 +206,7 @@ $(function () {
     $('#modal-delete-revision-dialog').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
 
-        $('#modal-delete-revision-form').attr('action', '<?= site_url("admin/content"); ?>/' + button.data('id') + '/destroy');
+        $('#modal-delete-revision-form').attr('action', '<?= site_url("admin/content"); ?>/' + button.data('id') + '/revisions');
     });
 });
 
