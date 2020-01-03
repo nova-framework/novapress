@@ -47,10 +47,10 @@ class Revisions extends BaseController
 
         $post = $revision->parent()->first();
 
-        if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) !== 1) {
-            $version = 0;
-        } else {
+        if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) === 1) {
             $version = (int) $matches[1];
+        } else {
+            $version = 0;
         }
 
         $revision->delete();
@@ -74,19 +74,24 @@ class Revisions extends BaseController
 
         $post = $revision->parent()->first();
 
-        // Restore the Post's title, content and excerpt.
-        $post->content = $revision->content;
-        $post->excerpt = $revision->excerpt;
-        $post->title   = $revision->title;
+        // Restore the parent Post from Revision variables.
+        $post->content    = $revision->content;
+        $post->excerpt    = $revision->excerpt;
+        $post->title      = $revision->title;
+        $post->password   = $revision->password;
+        $post->menu_order = $revision->menu_order;
+        $post->mime_type  = $revision->mime_type;
 
         $post->save();
 
         // Handle the MetaData.
-        if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) !== 1) {
-            $version = 0;
+        if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $revision->name, $matches) === 1) {
+            $version = (int) $matches[1];
         } else {
-            $post->saveMeta('version', $version = (int) $matches[1]);
+            $version = 0;
         }
+
+        $post->saveMeta('version', $version);
 
         // Invalidate the content caches.
         Cache::section('content')->flush();

@@ -101,11 +101,10 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'auth', 'namespace' => '
     Route::post('content/{id}/revisions', 'Revisions@destroy');
     Route::post('content/{id}/restore',   'Revisions@restore');
 
-    // The Post editor's Tags management
     Route::group(array('namespace' => 'Editor'), function ()
     {
-        Route::post('content/{id}/tags', 'Tags@attach');
-
+        // The Editor's Tags management
+        Route::post('content/{id}/tags',                'Tags@attach');
         Route::post('content/{id}/tags/{tagId}/detach', 'Tags@detach')->where('tagId', '(\d+)');
     });
 

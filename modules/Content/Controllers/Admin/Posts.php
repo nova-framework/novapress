@@ -383,7 +383,7 @@ class Posts extends BaseController
 
         $count++;
 
-        $slug = $post->id .'-revision-v' .$count;
+        $slug = sprintf('%d-revision-v%d', $post->id, $count);
 
         $revision = Post::create(array(
             'content'        => $post->content,
@@ -393,13 +393,15 @@ class Posts extends BaseController
             'password'       => $post->password,
             'name'           => $slug,
             'parent_id'      => $post->id,
-            'guid'           => site_url('content/' .$slug),
+            'guid'           => site_url($slug),
             'menu_order'     => $post->menu_order,
             'type'           => 'revision',
             'mime_type'      => $post->mime_type,
             'author_id'      => $authUser->id,
             'comment_status' => 'closed',
         ));
+
+        $post->saveMeta('version', $count);
 
         // Fire the finishing event.
         Event::dispatch('content.post.updated', array($post, $creating));
@@ -424,7 +426,7 @@ class Posts extends BaseController
     public function destroy($id)
     {
         try {
-            $post = Post::findOrFail($id);
+            $post = Post::with('revisions', 'taxonomies')->findOrFail($id);
         }
         catch (ModelNotFoundException $e) {
             return Redirect::back()->with('danger', __d('content', 'Record not found: #{0}', $id));
@@ -435,7 +437,13 @@ class Posts extends BaseController
         // Fire the starting event.
         Event::dispatch('content.post.deleting', array($post));
 
-        // Delete the Post.
+        // Delete first the Post Revisions.
+        $post->revisions->each(function ($revision)
+        {
+            $revision->delete();
+        });
+
+        // Detach the associated Taxonomies.
         $post->taxonomies()->detach();
 
         $post->taxonomies->each(function ($taxonomy)
@@ -443,6 +451,7 @@ class Posts extends BaseController
             $taxonomy->updateCount();
         });
 
+        // Finally, delete the Post.
         $post->delete();
 
         // Fire the finishing event.
