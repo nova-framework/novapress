@@ -271,7 +271,7 @@ class Posts extends BaseController
         $post->content = $input['content'];
         $post->name    = $slug;
 
-        $post->guid = site_url('content/' .$slug);
+        $post->guid = site_url($slug);
 
         // The Status.
         $status = Arr::get($input, 'status', 'draft');
@@ -401,6 +401,9 @@ class Posts extends BaseController
             'comment_status' => 'closed',
         ));
 
+        $revision->saveMeta('version', $count);
+
+        //
         $post->saveMeta('version', $count);
 
         // Fire the finishing event.
