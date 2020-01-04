@@ -261,18 +261,25 @@ class Posts extends BaseController
         // Fire the starting event.
         Event::dispatch('content.post.updating', array($post, $creating));
 
+        //
         // Create a new Revision from the current Post instance.
 
         if (! $creating) {
             $this->createRevision($post, $authUser);
         }
 
-        $slug = Arr::get($input, 'slug') ?: Post::uniqueName($input['title'], $post->id);
+        //
+        // Update the current Post instance.
 
-        // Update the Post instance.
-        $post->title   = $input['title'];
-        $post->content = $input['content'];
-        $post->name    = $slug;
+        $post->title = $title = Arr::get($input, 'title');
+
+        $post->content = Arr::get($input, 'content');
+
+        if (empty($slug = Arr::get($input, 'slug'))) {
+            $slug = Post::uniqueName($title, ! $creating ? $post->id : null);
+        }
+
+        $post->name = $slug;
 
         $post->guid = site_url($slug);
 
