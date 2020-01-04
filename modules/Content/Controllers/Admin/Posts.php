@@ -81,7 +81,7 @@ class Posts extends BaseController
 
     public function create(Request $request, $type)
     {
-        $authUser = Auth::user();
+        $authUser = $lastEditor = Auth::user();
 
         $postType = PostType::make($type);
 
@@ -100,9 +100,9 @@ class Posts extends BaseController
             'comment_status' => ($type == 'post') ? 'open' : 'closed',
         ));
 
-        $post->name = $slug = $post->id;
+        $post->name = $postId = $post->id;
 
-        $post->guid = site_url($slug);
+        $post->guid = site_url('content/' .$postId);
 
         // Save the Post again, to update its name.
         $post->save();
@@ -138,9 +138,6 @@ class Posts extends BaseController
 
         // Revisions.
         $revisions = $post->newCollection();
-
-        // The last editor.
-        $lastEditor = $authUser;
 
         // Compute the stylesheets needed to be loaded in editor.
         $stylesheets = $this->getDefaultThemeStylesheets();
