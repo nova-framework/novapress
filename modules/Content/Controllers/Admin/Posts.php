@@ -100,7 +100,9 @@ class Posts extends BaseController
             'comment_status' => ($type == 'post') ? 'open' : 'closed',
         ));
 
-        $post->name = $post->id;
+        $post->name = $slug = $post->id;
+
+        $post->guid = site_url($slug);
 
         // Save the Post again, to update its name.
         $post->save();
@@ -276,7 +278,7 @@ class Posts extends BaseController
         $post->content = Arr::get($input, 'content');
 
         if (empty($slug = Arr::get($input, 'slug'))) {
-            $slug = Post::uniqueName($title, ! $creating ? $post->id : null);
+            $slug = Post::uniqueName($title, $post->id);
         }
 
         $post->name = $slug;
