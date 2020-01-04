@@ -74,14 +74,16 @@ abstract class ActionHookDispatcher
     {
         $this->sorted[$hook] = array();
 
-        if (isset($this->listeners[$hook])) {
-            uksort($this->listeners[$hook], function ($param1, $param2)
-            {
-                return strnatcmp($param1, $param2);
-            });
-
-            $this->sorted[$hook] = $this->listeners[$hook];
+        if (! isset($this->listeners[$hook])) {
+            return;
         }
+
+        uksort($this->listeners[$hook], function ($param1, $param2)
+        {
+            return strnatcmp($param1, $param2);
+        });
+
+        $this->sorted[$hook] = $this->listeners[$hook];
     }
 
     /**

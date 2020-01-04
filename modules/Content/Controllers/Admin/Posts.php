@@ -254,15 +254,18 @@ class Posts extends BaseController
             return Response::json(array('redirectTo' => 'refresh'), 400);
         }
 
-        $postType = PostType::make($post->type);
+        $postType = PostType::make($type = $post->type);
 
         $creating = (bool) Arr::get($input, 'creating', 0);
 
         // Fire the starting event.
         Event::dispatch('content.post.updating', array($post, $creating));
 
-        //
-        $type = $post->type;
+        // Create a new Revision from the current Post instance.
+
+        if (! $creating) {
+            $this->createRevision($post, $authUser);
+        }
 
         $slug = Arr::get($input, 'slug') ?: Post::uniqueName($input['title'], $post->id);
 
@@ -314,20 +317,20 @@ class Posts extends BaseController
 
         // Handle the MetaData.
         $post->saveMeta(array(
-            'thumbnail_id' => (int) $request->input('thumbnail'),
+            'thumbnail_id' => (int) Arr::get($input, 'thumbnail'),
 
             'edit_last' => $authUser->id,
         ));
 
         if ($type == 'block') {
             $post->saveMeta(array(
-                'block_show_title' => (int) $request->input('block-show-title'),
+                'block_show_title' => (int) Arr::get($input, 'block-show-title'),
 
-                'block_visibility_mode'   => $request->input('block-show-mode'),
-                'block_visibility_path'   => $request->input('block-show-path'),
+                'block_visibility_mode'   => Arr::get($input, 'block-show-mode'),
+                'block_visibility_path'   => Arr::get($input, 'block-show-path'),
 
-                'block_visibility_filter' => $request->input('block-show-filter', 'any'),
-                'block_widget_position'   => $request->input('block-position'),
+                'block_visibility_filter' => Arr::get($input, 'block-show-filter', 'any'),
+                'block_widget_position'   => Arr::get($input, 'block-position'),
             ));
         }
 
@@ -370,42 +373,6 @@ class Posts extends BaseController
             });
         }
 
-        // Create a new revision from the current Post instance.
-        $count = 0;
-
-        $names = $post->revisions()->lists('name');
-
-        foreach ($names as $name) {
-            if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $name, $matches) === 1) {
-                $count = max($count, (int) $matches[1]);
-            }
-        }
-
-        $count++;
-
-        $slug = sprintf('%d-revision-v%d', $post->id, $count);
-
-        $revision = Post::create(array(
-            'content'        => $post->content,
-            'title'          => $post->title,
-            'excerpt'        => $post->excerpt,
-            'status'         => 'inherit',
-            'password'       => $post->password,
-            'name'           => $slug,
-            'parent_id'      => $post->id,
-            'guid'           => site_url($slug),
-            'menu_order'     => $post->menu_order,
-            'type'           => 'revision',
-            'mime_type'      => $post->mime_type,
-            'author_id'      => $authUser->id,
-            'comment_status' => 'closed',
-        ));
-
-        $revision->saveMeta('version', $count);
-
-        //
-        $post->saveMeta('version', $count);
-
         // Fire the finishing event.
         Event::dispatch('content.post.updated', array($post, $creating));
 
@@ -424,6 +391,45 @@ class Posts extends BaseController
             'redirectTo' => site_url('admin/content/' .Str::plural($type))
 
         ), 200);
+    }
+
+    protected function createRevision(Post $post, User $user)
+    {
+        $version = 0;
+
+        $names = $post->revisions()->lists('name');
+
+        foreach ($names as $name) {
+            if (preg_match('#^(?:\d+)-revision-v(\d+)$#', $name, $matches) === 1) {
+                $version = max($version, (int) $matches[1]);
+            }
+        }
+
+        $version++;
+
+        // Save the current version also on the Post metadata.
+        $post->saveMeta('version', $version);
+
+        // Compute the slug of current Revision.
+        $slug = sprintf('%d-revision-v%d', $post->id, $version);
+
+        $revision = Post::create(array(
+            'content'        => $post->content,
+            'title'          => $post->title,
+            'excerpt'        => $post->excerpt,
+            'status'         => 'inherit',
+            'password'       => $post->password,
+            'name'           => $slug,
+            'parent_id'      => $post->id,
+            'guid'           => site_url($slug),
+            'menu_order'     => $post->menu_order,
+            'type'           => 'revision',
+            'mime_type'      => $post->mime_type,
+            'author_id'      => $user->id,
+            'comment_status' => 'closed',
+        ));
+
+        $revision->saveMeta('version', $version);
     }
 
     public function destroy($id)

@@ -83,7 +83,7 @@ abstract class ContentType
         $locale = $this->manager->getCurrentLocale();
 
         if (! isset($this->labels[$locale])) {
-            $this->labels[$locale] = static::labels();
+            $this->labels[$locale] = $this->labels();
         }
 
         $key = sprintf('%s.%s', $locale, Str::camel($name));

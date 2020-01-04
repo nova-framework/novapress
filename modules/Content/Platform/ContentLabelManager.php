@@ -101,8 +101,8 @@ class ContentLabelManager
 
     protected function getCurrentLocale()
     {
-        $languageManager = $this->container['language'];
+        $language = $this->container['language'];
 
-        return $languageManager->getLocale();
+        return $language->getLocale();
     }
 }
