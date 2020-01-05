@@ -264,25 +264,12 @@ class Posts extends BaseController
         // Create a new Revision from the current Post instance.
 
         if (! $creating) {
-            $this->createRevision($post, $authUser);
+            $this->createPostRevision($post, $authUser);
         }
 
         //
         // Update the current Post instance.
 
-        $post->title = $title = Arr::get($input, 'title');
-
-        $post->content = Arr::get($input, 'content');
-
-        if (empty($slug = Arr::get($input, 'slug'))) {
-            $slug = Post::uniqueName($title, $post->id);
-        }
-
-        $post->name = $slug;
-
-        $post->guid = site_url($slug);
-
-        // The Status.
         $status = Arr::get($input, 'status', 'draft');
 
         if ($creating && ($status === 'draft')) {
@@ -307,6 +294,21 @@ class Posts extends BaseController
 
         $post->status   = $status;
         $post->password = $password;
+
+        $post->content = Arr::get($input, 'content');
+
+        $post->title = $title = Arr::get($input, 'title');
+
+        if (empty($slug = Arr::get($input, 'slug'))) {
+            $slug = Post::uniqueName($title, $post->id);
+        }
+
+        $post->name = $slug;
+
+        $post->guid = site_url($slug);
+
+        //
+        // Update the Post custom attributes.
 
         if ($type == 'page') {
             $post->parent_id  = (int) Arr::get($input, 'parent', 0);
@@ -399,7 +401,7 @@ class Posts extends BaseController
         ), 200);
     }
 
-    protected function createRevision(Post $post, User $user)
+    protected function createPostRevision(Post $post, User $user)
     {
         $version = 0;
 
