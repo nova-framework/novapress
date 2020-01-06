@@ -297,6 +297,7 @@ class Posts extends BaseController
 
         $post->content = Arr::get($input, 'content');
 
+        //
         $post->title = $title = Arr::get($input, 'title');
 
         if (empty($slug = Arr::get($input, 'slug'))) {

@@ -201,24 +201,35 @@ class Post extends Model
 
     /**
      * @param array $attributes
-     * @return array
+     * @return static
      */
     protected function getPostInstance(array $attributes)
     {
-        $className = static::class;
-
-        // Check if it should be instantiated with a custom post type class.
-        if (isset($attributes['type']) && ! empty($attributes['type'])) {
-            $type = $attributes['type'];
-
-            if (isset(static::$postTypes[$type])) {
-                $className = static::$postTypes[$type];
-            } else if (! is_null($model = PostType::findModelByType($type))) {
-                $className = $model;
-            }
+        if (! empty($type = Arr::get($attributes, 'type'))) {
+            $className = $this->resolveModelName($type);
+        } else {
+            $className = static::class;
         }
 
         return new $className();
+    }
+
+    /**
+     * @param string $type
+     * @return string
+     */
+    protected function resolveModelName($type)
+    {
+        if (! is_null($className = Arr::get(static::$postTypes, $type))) {
+            return $className;
+        }
+
+        //
+        else if (! is_null($className = PostType::findModelByType($type))) {
+            return $className;
+        }
+
+        return static::class;
     }
 
     public function getTypeInstance()
