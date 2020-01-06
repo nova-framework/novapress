@@ -220,12 +220,9 @@ class Post extends Model
      */
     protected function resolveModelName($type)
     {
-        if (! is_null($className = Arr::get(static::$postTypes, $type))) {
+        if (! empty($className = Arr::get(static::$postTypes, $type))) {
             return $className;
-        }
-
-        //
-        else if (! is_null($className = PostType::findModelByType($type))) {
+        } else if (! empty($className = PostType::findModelByType($type))) {
             return $className;
         }
 
