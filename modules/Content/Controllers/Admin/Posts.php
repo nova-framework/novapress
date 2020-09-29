@@ -278,6 +278,7 @@ class Posts extends BaseController
 
         $visibility = Arr::get($input, 'visibility', 'public');
 
+        //
         $password = null;
 
         if ($visibility == 'private') {
@@ -344,42 +345,38 @@ class Posts extends BaseController
         }
 
         // We have a standard Post.
-        else if ($type == 'post') {
-            $categories = array();
+        else if (($type == 'post') && ! empty($value = Arr::get($input, 'categories', ''))) {
+            // The value is data serialized by javascript, like: 'category[]=1&category[]=3&category[]=4'
 
-            if (! empty($result = Arr::get($input, 'categories'))) {
-                // The value is something like: 'category[]=1&category[]=3&category[]=4'
+            parse_str(urldecode($value), $data);
 
-                $categories = array_map(function ($item)
-                {
-                    list (, $value) = explode('=', $item);
-
-                    return (int) $value;
-
-                }, explode('&', urldecode($result)));
-            }
-
-            $taxonomies = $post->taxonomies()
-                ->where('taxonomy', 'category')
-                ->lists('id');
-
-            if (! empty($ids = array_diff($taxonomies, $categories))) {
-                $post->taxonomies()->detach($ids);
-            }
-
-            if (! empty($ids = array_diff($categories, $taxonomies))) {
-                $post->taxonomies()->attach($ids);
-            }
-
-            // Update the count field in the affected taxonomies.
-            $ids = array_unique(array_merge($taxonomies, $categories));
-
-            $taxonomies = Taxonomy::whereIn('id', $ids)->get();
-
-            $taxonomies->each(function ($taxonomy)
+            $items = array_map(function ($value)
             {
-                $taxonomy->updateCount();
-            });
+                return intval($value);
+
+            }, Arr::get($data, 'category', array()));
+
+            if (! empty($items = array_filter($items))) {
+                $taxonomies = $post->taxonomies()->where('taxonomy', 'category')->lists('id');
+
+                if (! empty($ids = array_diff($taxonomies, $items))) {
+                    $post->taxonomies()->detach($ids);
+                }
+
+                if (! empty($ids = array_diff($items, $taxonomies))) {
+                    $post->taxonomies()->attach($ids);
+                }
+
+                // Update the count field in the affected taxonomies.
+                $ids = array_unique(array_merge($taxonomies, $items));
+
+                $taxonomies = Taxonomy::whereIn('id', $ids)->get();
+
+                $taxonomies->each(function ($taxonomy)
+                {
+                    $taxonomy->updateCount();
+                });
+            }
         }
 
         // Fire the finishing event.

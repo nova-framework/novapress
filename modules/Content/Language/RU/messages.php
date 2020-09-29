@@ -283,6 +283,7 @@ return array (
   'The Menu Items order was successfully updated.' => 'Порядок элементов меню успешно обновлён',
   'The Menu {0} was successfully deleted.' => 'Меню {0} успешно удалено',
   'The Revision <b>{0}</b> of {1} <b>#{2}</b> was successfully deleted.' => 'Редакция <b>{0}</b> из {1} <b>#{2}</b> успешно удалена.',
+  'The Tags value is required' => '',
   'The password is not valid.' => 'Пароль недействителен.',
   'The reCaptcha verification failed.' => 'Ошибка проверки reCaptcha.',
   'The registered {0}' => 'Зарегистрированные {0}',
