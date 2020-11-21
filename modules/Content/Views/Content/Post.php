@@ -1,5 +1,5 @@
 <section class="page-header" style="margin-bottom: 10px;">
-    <h1><?= __d('nodes', $title); ?></h1>
+    <h1><?= __d('content', $title); ?></h1>
 </section>
 
 <!-- Main content -->
