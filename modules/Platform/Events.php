@@ -6,7 +6,7 @@
  * @version 3.0
  */
 
-use Modules\Platform\Models\Option;
+use App\Models\Option;
 
 
 Event::listen('frontend.menu.left', function ()
