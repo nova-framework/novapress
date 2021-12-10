@@ -2,7 +2,7 @@
 
 namespace Shared\Backup\Databases;
 
-use Shared\Backup\Database\Console;
+use Shared\Backup\Console;
 
 
 class PostgresDatabase implements DatabaseInterface
