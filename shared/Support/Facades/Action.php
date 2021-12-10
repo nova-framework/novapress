@@ -13,6 +13,6 @@ class Action extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'Shared\Platform\Action';
+        return 'Shared\Hooks\Action';
     }
 }
